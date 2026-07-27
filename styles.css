@@ -69,12 +69,18 @@ body {
   /* No TOC gutter until 1200px, where the nav appears */
   --toc-w: 0rem;
   --toc-gap: 0rem;
+
+  /* Extra horizontal inset applied to the hero only, drawing the left-anchored
+     name and the right-anchored actions closer together */
+  --hero-inset: 0rem;
 }
 @media (min-width: 768px) {
   body {
     --gap-x: 3.2rem;
     --padding-x: 3.2rem;
     --columns: 8;
+
+    --hero-inset: 4.8rem;
   }
 }
 @media (min-width: 1200px) {
@@ -88,6 +94,8 @@ body {
        TOC is hidden. */
     --toc-w: 15rem;
     --toc-gap: 3.2rem;
+
+    --hero-inset: 12rem;
   }
 }
 
@@ -774,8 +782,28 @@ button {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 12rem var(--padding-x) 1.6rem;
+  /* The bottom value reserves room for the absolutely-placed meta strip */
+  padding: 12rem var(--padding-x) 6.4rem;
   overflow: hidden;
+}
+
+/* Wider side padding than the rest of the page, so the name on the left and the
+   actions on the right are drawn in towards each other.
+
+   These override the shared gutter rule in the TABLE OF CONTENTS block above,
+   which is why --toc-w has to be added back in on the left — without it the
+   headline would sit underneath the nav. */
+@media (min-width: 768px) {
+  .hero {
+    padding-left: calc(var(--padding-x) + var(--hero-inset));
+    padding-right: calc(var(--padding-x) + var(--hero-inset));
+  }
+}
+@media (min-width: 1200px) {
+  .hero {
+    padding-left: calc(var(--padding-x) + var(--toc-w) + var(--hero-inset));
+    padding-right: calc(var(--padding-x) + var(--hero-inset));
+  }
 }
 
 /* No local bloom in the hero — the background accent layer (top of this file)
@@ -788,10 +816,20 @@ button {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 3.2rem;
+  /* Generous separation between the intro block and the actions row… */
+  gap: 4.8rem;
 }
 
-.hero__label { margin-bottom: -1.6rem; }
+/* …but a tight one inside it, so the tagline reads as part of the name rather
+   than as a separate element floating below it. */
+.hero__intro {
+  display: grid;
+  justify-items: start;
+  gap: 1.6rem;
+}
+@media (min-width: 1200px) {
+  .hero__intro { gap: 2rem; }
+}
 
 .hero__title {
   font-size: 4rem;
@@ -809,18 +847,6 @@ button {
   .hero__title-line:last-child { padding-left: 12rem; } /* offset second line */
 }
 
-.hero__bottom {
-  display: grid;
-  gap: 2.4rem;
-  align-items: end;
-}
-@media (min-width: 768px) {
-  .hero__bottom {
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: var(--gap-x);
-  }
-}
-
 .hero__sub {
   max-width: 34rem;
   font-size: 1.8rem;
@@ -832,17 +858,117 @@ button {
   .hero__sub { font-size: 2.4rem; max-width: 46rem; }
 }
 
-.hero__cta { justify-self: start; }
+/* CTA and the showcase stack sit together on the hero's right-hand side */
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  /* Baseline-ish pairing: the button lines up with the stack's caption rather
+     than floating against the middle of the covers */
+  align-items: flex-end;
+  justify-content: flex-start;
+  gap: 2.4rem;
+}
+/* Pushed to the hero's right edge, opposite the name — the stack keeps its
+   place to the left of the button. Left-aligned on small screens, where the
+   row wraps and there is no width to play with. */
+@media (min-width: 768px) {
+  .hero__actions { justify-content: flex-end; }
+}
+@media (min-width: 1200px) {
+  .hero__actions { gap: 3.2rem; }
+}
 
-.hero__meta {
+/* --- Fanned cover stack -------------------------------------------------
+   Three covers at a readable size, overlapped by a negative margin and splayed
+   by a per-card rotation. Cards above, caption beneath. On hover the overlap
+   loosens and the angles widen, so the stack opens like a handful of prints. */
+.hero__stack {
+  display: grid;
+  gap: 1.4rem;
+  justify-items: start;
+}
+/* Caption follows the block to the right edge, so the stack keeps a clean
+   right margin against the page padding */
+@media (min-width: 768px) {
+  .hero__stack { justify-items: end; }
+}
+
+.hero__stack-cards {
+  display: flex;
+  align-items: center;
+}
+
+.hero__stack-card {
+  --w: 11rem;
   position: relative;
+  display: block;
+  width: var(--w);
+  aspect-ratio: 9 / 16;
+  border-radius: 0.2rem;
+  overflow: hidden;
+  background: var(--navy);
+  /* A ring in the page colour separates the overlapping covers */
+  box-shadow: 0 0 0 0.2rem var(--ground);
+  transition: transform 0.6s var(--easeOutQuart),
+              margin-left 0.6s var(--easeOutQuart);
+}
+@media (min-width: 1200px) {
+  .hero__stack-card { --w: 14rem; }
+}
+.hero__stack-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Overlap everything after the first — proportional to card width, so the fan
+   holds its shape as the cards scale */
+.hero__stack-card + .hero__stack-card { margin-left: calc(var(--w) * -0.42); }
+
+/* Resting fan, and the stacking order that keeps it reading left-to-right */
+.hero__stack-card:nth-child(1) { transform: rotate(-6deg); z-index: 3; }
+.hero__stack-card:nth-child(2) { transform: rotate(0deg);  z-index: 2; }
+.hero__stack-card:nth-child(3) { transform: rotate(6deg);  z-index: 1; }
+
+@media (hover: hover) {
+  .hero__stack:hover .hero__stack-card + .hero__stack-card {
+    margin-left: calc(var(--w) * -0.22);
+  }
+  .hero__stack:hover .hero__stack-card:nth-child(1) { transform: rotate(-10deg) translateY(-0.4rem); }
+  .hero__stack:hover .hero__stack-card:nth-child(2) { transform: rotate(0deg) translateY(-0.8rem); }
+  .hero__stack:hover .hero__stack-card:nth-child(3) { transform: rotate(10deg) translateY(-0.4rem); }
+}
+
+.hero__stack-meta {
+  display: flex;
+  align-items: baseline;
+  gap: 1.2rem;
+}
+.hero__stack-count {
+  font-size: 1.2rem;
+  font-weight: 500;
+  line-height: 1em;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+/* Full-bleed strip pinned to the bottom of the hero. Taken out of flow and
+   anchored to the section's edges, so it ignores the hero's wide side padding
+   and its rule runs the whole width of the screen — no negative margins to keep
+   in sync with --hero-inset / --toc-w. The hero reserves room for it with the
+   padding-bottom above. */
+.hero__meta {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
   z-index: 1;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   gap: 1.6rem;
-  margin-top: 6.4rem;
-  padding-top: 1.6rem;
+  /* Its own inset, so the text still clears the screen edges */
+  padding: 1.6rem var(--padding-x);
   border-top: 1px solid var(--hairline);
   font-size: 1.2rem;
   letter-spacing: 0.02em;

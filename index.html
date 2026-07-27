@@ -146,19 +146,53 @@
          ============================================================ -->
     <section class="hero" id="intro">
       <div class="hero__inner">
-        <p class="label hero__label" data-reveal data-parallax="-0.06">
-          Content Creator &amp; Operations
-        </p>
+        <!--
+          Label, name and tagline are one block with a tight internal gap, and a
+          single parallax speed on the wrapper — so the tagline stays locked to
+          the name instead of drifting away from it on scroll.
+        -->
+        <div class="hero__intro" data-parallax="-0.1">
+          <p class="label hero__label" data-reveal>
+            Content Creator &amp; Operations
+          </p>
 
-        <h1 class="hero__title" data-reveal data-parallax="-0.12">
-          <span class="hero__title-line">Wydia</span>
-          <span class="hero__title-line">Kristiany</span>
-        </h1>
+          <h1 class="hero__title" data-reveal>
+            <span class="hero__title-line">Wydia</span>
+            <span class="hero__title-line">Kristiany</span>
+          </h1>
 
-        <div class="hero__bottom">
-          <p class="hero__sub" data-reveal data-parallax="-0.04">
+          <p class="hero__sub" data-reveal>
             Versatile Content Creator &amp; Operations Specialist
           </p>
+        </div>
+
+        <div class="hero__actions">
+          <!--
+            Fanned stack of three covers — a preview of the showcase that
+            scrolls down to it. Placed before the CTA so DOM order matches the
+            left-to-right visual order. Decorative, so the images carry empty
+            alt text and the link supplies the accessible name.
+          -->
+          <a class="hero__stack" href="#work" data-cursor="View" data-reveal
+             aria-label="See selected work — ten reels">
+            <span class="hero__stack-cards" aria-hidden="true">
+              <span class="hero__stack-card">
+                <img src="assets/thumbnail/reel-01.jpg" alt="" width="720" height="1280" decoding="async" />
+              </span>
+              <span class="hero__stack-card">
+                <img src="assets/thumbnail/reel-02.jpg" alt="" width="640" height="1136" decoding="async" />
+              </span>
+              <span class="hero__stack-card">
+                <img src="assets/thumbnail/reel-03.jpg" alt="" width="640" height="1136" decoding="async" />
+              </span>
+            </span>
+
+            <span class="hero__stack-meta" aria-hidden="true">
+              <span class="hero__stack-count">10 Reels</span>
+              <span class="label">Selected work</span>
+            </span>
+          </a>
+
           <a class="btn btn--outline hero__cta" href="#contact" data-reveal>
             <span>Work with Me</span>
             <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
