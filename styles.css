@@ -1406,8 +1406,24 @@ button {
   display: grid;
   gap: 1.2rem;
   padding: 3.2rem 0;
+  padding-inline: 0;
   border-bottom: 1px solid var(--hairline);
-  transition: color 0.4s var(--easeOutQuart);
+  background: rgba(255, 255, 255, 0);
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0), 0 1px 4px rgba(0, 0, 0, 0);
+  border-radius: 0px;
+  transition: color 0.8s var(--easeOutQuart),
+              transform 1.2s var(--easeOutQuart),
+              opacity 1.2s var(--easeOutQuart),
+              background 1.2s var(--easeOutQuart),
+              box-shadow 1.2s var(--easeOutQuart),
+              border-radius 1.2s var(--easeOutQuart),
+              border-color 1.2s var(--easeOutQuart),
+              padding 1.2s var(--easeOutQuart),
+              padding-inline 1.2s var(--easeOutQuart),
+              backdrop-filter 1.2s var(--easeOutQuart),
+              -webkit-backdrop-filter 1.2s var(--easeOutQuart);
 }
 @media (min-width: 1024px) {
   .service {
@@ -1423,7 +1439,7 @@ button {
   font-style: italic;
   font-size: 1.4rem;
   color: var(--ink-disabled);
-  transition: color 0.4s var(--easeOutQuart);
+  transition: color 1.2s var(--easeOutQuart), transform 1.2s var(--easeOutQuart);
 }
 
 .service__name {
@@ -1432,6 +1448,7 @@ button {
   line-height: 1em;
   letter-spacing: -0.072rem;
   text-transform: uppercase;
+  transition: transform 1.2s var(--easeOutQuart), color 1.2s var(--easeOutQuart);
 }
 @media (min-width: 1200px) {
   .service__name { font-size: 3.2rem; letter-spacing: -0.096rem; }
@@ -1443,9 +1460,44 @@ button {
   letter-spacing: -0.032rem;
   color: var(--ink-secondary);
   max-width: 46ch;
+  transition: transform 1.2s var(--easeOutQuart), color 1.2s var(--easeOutQuart);
 }
 
 .service:hover .service__num { color: var(--ink); }
+
+/* Scroll-hover spotlight: JS toggles .is-scroll-active on whichever service
+   item is closest to the viewport centre. Inactive items dim; the active one
+   lifts and brightens, simulating a hover cursor driven by scroll. */
+.services__list:has(.is-scroll-active) .service:not(.is-scroll-active) {
+  opacity: 0.35;
+}
+.service.is-scroll-active {
+  transform: translate3d(var(--px, 0px), calc(var(--py, 0px) - 4px), 0);
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08), 0 1px 4px rgba(0, 0, 0, 0.04);
+  border-radius: 1.2rem;
+  border-bottom-color: transparent;
+  padding-inline: 2.4rem;
+}
+/* Hide the divider above the active card (i.e. previous sibling's bottom border) */
+.service:has(+ .service.is-scroll-active) {
+  border-bottom-color: transparent;
+}
+/* Also hide the top border of the list if the very first item is active */
+.services__list:has(.service.is-scroll-active:first-child) {
+  border-top-color: transparent;
+}
+.service.is-scroll-active .service__num {
+  color: var(--ink);
+  transform: translateX(4px);
+}
+.service.is-scroll-active .service__name,
+.service.is-scroll-active .service__desc {
+  transform: translateX(4px);
+}
 
 /* -----------------------------------------------------------------------------
    13  CONTACT

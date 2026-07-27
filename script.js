@@ -143,6 +143,54 @@
     });
   }
 
+  /* ---------------------------------------------------------------------------
+     04b SERVICE SCROLL-HOVER
+
+     As the user scrolls through the Services section, the service item whose
+     vertical centre is closest to the viewport centre gets the class
+     `is-scroll-active`. CSS applies a hover-like lift, brighter text and a
+     subtle glow — creating the illusion that scroll "hovers" through the list.
+
+     Items outside the services section are ignored. When no service is near
+     the centre (section out of view), all classes are removed.
+     ------------------------------------------------------------------------ */
+  var serviceItems = Array.prototype.slice.call(document.querySelectorAll('.service'));
+  var activeServiceIdx = -1;
+
+  function updateServiceHover() {
+    if (!serviceItems.length) return;
+
+    var vh = window.innerHeight;
+    var centre = vh * 0.5;
+    var bestIdx = -1;
+    var bestDist = Infinity;
+
+    serviceItems.forEach(function (el, i) {
+      var rect = el.getBoundingClientRect();
+      var elCentre = rect.top + rect.height * 0.5;
+      var dist = Math.abs(elCentre - centre);
+
+      // Only consider items that are at least partially visible
+      if (rect.bottom > 0 && rect.top < vh && dist < bestDist) {
+        bestDist = dist;
+        bestIdx = i;
+      }
+    });
+
+    // Only apply if the best item is reasonably close to the viewport centre
+    if (bestDist > vh * 0.45) bestIdx = -1;
+
+    if (bestIdx !== activeServiceIdx) {
+      if (activeServiceIdx > -1 && serviceItems[activeServiceIdx]) {
+        serviceItems[activeServiceIdx].classList.remove('is-scroll-active');
+      }
+      if (bestIdx > -1) {
+        serviceItems[bestIdx].classList.add('is-scroll-active');
+      }
+      activeServiceIdx = bestIdx;
+    }
+  }
+
   function onScroll() {
     if (parallaxTicking) return;
     parallaxTicking = true;
@@ -153,6 +201,7 @@
         renderParallax();
         renderGallery();
       }
+      updateServiceHover();
       parallaxTicking = false;
     });
   }
@@ -219,6 +268,12 @@
   var track = document.getElementById('workTrack');
   var overflowX = 0;
 
+  /* Lerp smoothing state for the horizontal gallery */
+  var galleryTargetTx = 0;   // Where scroll says we should be (px)
+  var galleryCurrentTx = 0;  // Where the track actually is (px, lerped)
+  var GALLERY_LERP = 0.08;   // Interpolation factor — lower = smoother
+  var galleryRafId = null;    // Persistent rAF handle
+
   var canPin = window.matchMedia('(min-width: 1024px)');
 
   function measureGallery() {
@@ -230,6 +285,9 @@
       scroller.style.height = '';
       track.style.removeProperty('--tx');
       overflowX = 0;
+      galleryTargetTx = 0;
+      galleryCurrentTx = 0;
+      if (galleryRafId) { cancelAnimationFrame(galleryRafId); galleryRafId = null; }
       return;
     }
 
@@ -250,15 +308,39 @@
       : 0;
 
     scroller.style.height = (window.innerHeight + overflowX) + 'px';
+
+    /* Kick off the smooth render loop if it isn't running yet */
+    if (!galleryRafId) galleryLerpLoop();
   }
 
+  /** Update the scroll-derived target — called on every scroll event */
   function renderGallery() {
     if (!overflowX || !scroller) return;
 
     var rect = scroller.getBoundingClientRect();
     var progress = Math.max(0, Math.min(1, -rect.top / overflowX));
 
-    track.style.setProperty('--tx', (-progress * overflowX).toFixed(2) + 'px');
+    galleryTargetTx = -progress * overflowX;
+  }
+
+  /** Persistent rAF loop: ease currentTx → targetTx each frame */
+  function galleryLerpLoop() {
+    var diff = galleryTargetTx - galleryCurrentTx;
+
+    /* Snap when close enough to avoid endless sub-pixel ticking */
+    if (Math.abs(diff) < 0.5) {
+      galleryCurrentTx = galleryTargetTx;
+    } else {
+      galleryCurrentTx += diff * GALLERY_LERP;
+    }
+
+    track.style.setProperty('--tx', galleryCurrentTx.toFixed(2) + 'px');
+
+    if (overflowX) {
+      galleryRafId = requestAnimationFrame(galleryLerpLoop);
+    } else {
+      galleryRafId = null;
+    }
   }
 
   if (scroller && track) {
