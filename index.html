@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Wydia Kristiany — Content Creator &amp; Operations Specialist</title>
+  <meta name="description" content="Wydia Kristiany is a versatile Content Creator and Operations Specialist based in Batulicin, Indonesia, blending social media strategy with operational execution." />
+  <meta name="theme-color" content="#fffde2" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Wydia Kristiany — Content Creator &amp; Operations Specialist" />
+  <meta property="og:description" content="Versatile Content Creator and Operations Specialist based in Batulicin, Indonesia." />
+
+  <!--
+    Typeface substitutes for the reference site's licensed fonts:
+      TWK Lausanne  -> Inter Tight  (neutral grotesque, tight negative tracking)
+      Herbik Italic -> Instrument Serif Italic (small accent labels)
+  -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet" />
+
+  <!-- Instagram embeds are mounted on demand; warm the connection early. -->
+  <link rel="preconnect" href="https://www.instagram.com" />
+
+  <link rel="stylesheet" href="styles.css" />
+
+  <!-- Enables progressive-enhancement hooks; without JS all content stays visible. -->
+  <script>document.documentElement.classList.replace('no-js', 'js');</script>
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- ============================================================
+       BACKGROUND ACCENTS
+       Soft pastel-pink blooms spanning the full document height, behind all
+       content. Purely presentational, so it is hidden from assistive tech and
+       ignores pointer events.
+       ============================================================ -->
+  <div class="accents" aria-hidden="true">
+    <span class="accents__blob accents__blob--1"></span>
+    <span class="accents__blob accents__blob--2"></span>
+    <span class="accents__blob accents__blob--3"></span>
+    <span class="accents__blob accents__blob--4"></span>
+    <span class="accents__blob accents__blob--5"></span>
+    <span class="accents__blob accents__blob--6"></span>
+    <span class="accents__blob accents__blob--7"></span>
+    <span class="accents__blob accents__blob--8"></span>
+  </div>
+
+  <!-- ============================================================
+       HEADER — fixed, transparent, frosts on scroll
+       ============================================================ -->
+  <header class="header" id="header">
+    <div class="header__inner">
+      <a class="header__logo" href="#top" aria-label="Wydia Kristiany — home">
+        <span class="header__logo-text">Wydia&nbsp;Kristiany</span>
+      </a>
+
+      <nav class="header__nav" aria-label="Primary">
+        <a class="hover-line" href="#about">About</a>
+        <a class="hover-line" href="#work">Work</a>
+        <a class="hover-line" href="#services">Services</a>
+        <a class="hover-line" href="#contact">Contact</a>
+      </nav>
+
+      <a class="btn btn--pill header__cta" href="#contact">Work with Me</a>
+
+      <button class="header__toggle" type="button" id="menuToggle"
+              aria-expanded="false" aria-controls="mobileMenu">
+        <span class="header__toggle-label">Menu</span>
+        <span class="header__toggle-bars" aria-hidden="true"><i></i><i></i></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Full-screen mobile menu -->
+  <div class="menu" id="mobileMenu" hidden>
+    <nav class="menu__nav" aria-label="Mobile">
+      <a href="#about"><span class="menu__index">01</span>About</a>
+      <a href="#work"><span class="menu__index">02</span>Work</a>
+      <a href="#services"><span class="menu__index">03</span>Services</a>
+      <a href="#contact"><span class="menu__index">04</span>Contact</a>
+    </nav>
+    <div class="menu__foot">
+      <div>
+        <p class="label">Get in touch</p>
+        <a class="hover-line" href="mailto:wydiakris@gmail.com">wydiakris@gmail.com</a>
+      </div>
+      <div>
+        <p class="label">Based in</p>
+        <p>Batulicin, Indonesia</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       TABLE OF CONTENTS
+       Page-wide section index in the left gutter. A real <nav> of links, not
+       decoration — each entry scrolls to its section, and script.js marks the
+       one currently in view. Hidden below 1200px, where there is no gutter to
+       put it in.
+       ============================================================ -->
+  <nav class="toc is-hidden" id="toc" aria-label="Page sections">
+    <ol>
+      <li class="toc__item">
+        <a href="#about">
+          <span class="toc__num">1</span>
+          <span class="toc__dash"></span>
+          <span class="toc__label">About</span>
+        </a>
+      </li>
+      <li class="toc__item">
+        <a href="#work">
+          <span class="toc__num">2</span>
+          <span class="toc__dash"></span>
+          <span class="toc__label">Work</span>
+        </a>
+      </li>
+      <li class="toc__item">
+        <a href="#services">
+          <span class="toc__num">3</span>
+          <span class="toc__dash"></span>
+          <span class="toc__label">Services</span>
+        </a>
+      </li>
+      <li class="toc__item">
+        <a href="#contact">
+          <span class="toc__num">4</span>
+          <span class="toc__dash"></span>
+          <span class="toc__label">Contact</span>
+        </a>
+      </li>
+    </ol>
+  </nav>
+
+  <main id="main">
+    <span id="top"></span>
+
+    <!-- ============================================================
+         HERO
+         data-parallax speeds: positive lags behind the scroll,
+         negative runs ahead of it.
+         ============================================================ -->
+    <section class="hero" id="intro">
+      <div class="hero__inner">
+        <p class="label hero__label" data-reveal data-parallax="-0.06">
+          Content Creator &amp; Operations
+        </p>
+
+        <h1 class="hero__title" data-reveal data-parallax="-0.12">
+          <span class="hero__title-line">Wydia</span>
+          <span class="hero__title-line">Kristiany</span>
+        </h1>
+
+        <div class="hero__bottom">
+          <p class="hero__sub" data-reveal data-parallax="-0.04">
+            Versatile Content Creator &amp; Operations Specialist
+          </p>
+          <a class="btn btn--outline hero__cta" href="#contact" data-reveal>
+            <span>Work with Me</span>
+            <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+              <path d="M3 13L13 3M13 3H5.5M13 3v7.5" fill="none" stroke="currentColor" stroke-width="1.4" />
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Hero meta strip pinned to the bottom edge, as on the reference site -->
+      <div class="hero__meta">
+        <p><span class="hero__dot" aria-hidden="true"></span>Available for collaborations</p>
+        <p>Batulicin, Indonesia</p>
+        <p class="hero__scroll">Scroll</p>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         MARQUEE — infinite keyword ticker
+         ============================================================ -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee__track">
+        <!-- Duplicated once for a seamless -50% loop -->
+        <div class="marquee__group">
+          <span>Video Production</span><span class="marquee__sep">✳</span>
+          <span>Social Strategy</span><span class="marquee__sep">✳</span>
+          <span>Brand Engagement</span><span class="marquee__sep">✳</span>
+          <span>Promotional Campaigns</span><span class="marquee__sep">✳</span>
+          <span>Operations</span><span class="marquee__sep">✳</span>
+          <span>Partnership Sourcing</span><span class="marquee__sep">✳</span>
+        </div>
+        <div class="marquee__group">
+          <span>Video Production</span><span class="marquee__sep">✳</span>
+          <span>Social Strategy</span><span class="marquee__sep">✳</span>
+          <span>Brand Engagement</span><span class="marquee__sep">✳</span>
+          <span>Promotional Campaigns</span><span class="marquee__sep">✳</span>
+          <span>Operations</span><span class="marquee__sep">✳</span>
+          <span>Partnership Sourcing</span><span class="marquee__sep">✳</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         ABOUT
+         ============================================================ -->
+    <section class="section about" id="about">
+      <div class="section__head">
+        <p class="label" data-reveal>01 — About</p>
+      </div>
+
+      <div class="about__grid">
+        <h2 class="h2 about__title" data-reveal data-parallax="-0.05">
+          Creative output,<br />operational discipline.
+        </h2>
+
+        <div class="about__body">
+          <p class="lead" data-reveal>
+            Wydia is a versatile Content Creator and Operations Specialist based in
+            Batulicin, Indonesia, currently driving brand engagement for Devanka
+            Aesthetic Clinic. She uniquely blends creative social media strategy—producing
+            highly engaging educational and promotional video content—with strict
+            operational execution, ranging from inventory management to negotiating
+            cost-saving vendor partnerships.
+          </p>
+
+          <ul class="about__facts" data-reveal>
+            <li>
+              <p class="label">Currently</p>
+              <p>Devanka Aesthetic Clinic</p>
+            </li>
+            <li>
+              <p class="label">Focus</p>
+              <p>Short-form video &amp; brand growth</p>
+            </li>
+            <li>
+              <p class="label">Also</p>
+              <p>Inventory &amp; vendor negotiation</p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         SHOWCASE
+         Performance note: no Instagram <iframe> is present at page load.
+         Each tile is a lightweight CSS-only 9:16 poster; clicking one mounts a
+         single embed in the lightbox (see script.js § 05). The href is kept as
+         the no-JS fallback, so the grid still works with scripting disabled.
+         ============================================================ -->
+    <section class="section work" id="work">
+      <div class="section__head">
+        <p class="label" data-reveal>02 — Selected Work</p>
+        <p class="section__note" data-reveal>Ten reels · plays in place</p>
+      </div>
+
+      <h2 class="h2 work__title" data-reveal>
+        Reels that convert attention.
+      </h2>
+
+      <!--
+        Pinned horizontal gallery. On desktop the section is taller than the
+        viewport; .work__stage sticks while script.js translates the track
+        sideways in proportion to scroll progress. Below 1024px (and under
+        reduced-motion) it stays a native swipeable scroll-snap carousel, so
+        nothing is scroll-jacked on touch.
+      -->
+      <div class="work__scroller" id="workScroller">
+        <div class="work__stage">
+
+          <ul class="work__track" id="workTrack">
+        <!--
+          Card template: <a> wraps the whole tile.
+          data-reel   = Instagram shortcode, used to build the embed URL
+          data-tone   = 1–5, picks a gradient from the palette
+          --i         = staggers the reveal within the row
+        -->
+        <li class="work__item" style="--rot:-2.6deg; --shift:1.6rem">
+          <a class="card" data-cursor="Play" href="https://www.instagram.com/reel/DW5aDUjk4mM/"
+             target="_blank" rel="noopener noreferrer"
+             data-reel="DW5aDUjk4mM" data-title="Reel 01" data-tone="1">
+            <span class="card__media">
+              <!-- alt is empty: the card's own "Reel 01 / Play" text already
+                   names this link, so a description here would just repeat it. -->
+              <img class="card__img" src="assets/thumbnail/reel-01.jpg" alt=""
+                   width="720" height="1280" loading="lazy" decoding="async" />
+              <span class="card__scrim" aria-hidden="true"></span>
+              <span class="card__index" aria-hidden="true">01</span>
+              <span class="card__play" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M9 6.5l9 5.5-9 5.5V6.5z" fill="currentColor" /></svg>
+              </span>
+            </span>
+            <span class="card__foot">
+              <span class="card__name">Reel 01</span>
+              <span class="card__cta">Play<span class="sr-only"> Reel 01</span></span>
+            </span>
+          </a>
+        </li>
+
+        <li class="work__item" style="--rot:1.4deg; --shift:-1.2rem">
+          <a class="card" data-cursor="Play" href="https://www.instagram.com/reel/DXCL_e3k93x/"
+             target="_blank" rel="noopener noreferrer"
+             data-reel="DXCL_e3k93x" data-title="Reel 02" data-tone="2">
+            <span class="card__media">
+              <!-- alt is empty: the card's own "Reel 02 / Play" text already
+                   names this link, so a description here would just repeat it. -->
+              <img class="card__img" src="assets/thumbnail/reel-02.jpg" alt=""
+                   width="640" height="1136" loading="lazy" decoding="async" />
+              <span class="card__scrim" aria-hidden="true"></span>
+              <span class="card__index" aria-hidden="true">02</span>
+              <span class="card__play" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M9 6.5l9 5.5-9 5.5V6.5z" fill="currentColor" /></svg>
+              </span>
+            </span>
+            <span class="card__foot">
+              <span class="card__name">Reel 02</span>
+              <span class="card__cta">Play<span class="sr-only"> Reel 02</span></span>
+            </span>
+          </a>
+        </li>
+
+        <li class="work__item" style="--rot:-1.2deg; --shift:2.2rem">
+          <a class="card" data-cursor="Play" href="https://www.instagram.com/reel/DXdQASBE5Re/"
+             target="_blank" rel="noopener noreferrer"
+             data-reel="DXdQASBE5Re" data-title="Reel 03" data-tone="3">
+            <span class="card__media">
+              <!-- alt is empty: the card's own "Reel 03 / Play" text already
+                   names this link, so a description here would just repeat it. -->
+              <img class="card__img" src="assets/thumbnail/reel-03.jpg" alt=""
+                   width="640" height="1136" loading="lazy" decoding="async" />
+              <span class="card__scrim" aria-hidden="true"></span>
+              <span class="card__index" aria-hidden="true">03</span>
+              <span class="card__play" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M9 6.5l9 5.5-9 5.5V6.5z" fill="currentColor" /></svg>
+              </span>
+            </span>
+            <span class="card__foot">
+              <span class="card__name">Reel 03</span>
+              <span class="card__cta">Play<span class="sr-only"> Reel 03</span></span>
+            </span>
+          </a>
+        </li>
+
+        <li class="work__item" style="--rot:2.2deg; --shift:-0.6rem">
+          <a class="card" data-cursor="Play" href="https://www.instagram.com/reel/DYyW53KTbRt/"
+             target="_blank" rel="noopener noreferrer"
+             data-reel="DYyW53KTbRt" data-title="Reel 04" data-tone="4">
+            <span class="card__media">
+              <!-- alt is empty: the card's own "Reel 04 / Play" text already
+                   names this link, so a description here would just repeat it. -->
+              <img class="card__img" src="assets/thumbnail/reel-04.jpg" alt=""
+                   width="640" height="1136" loading="lazy" decoding="async" />
+              <span class="card__scrim" aria-hidden="true"></span>
+              <span class="card__index" aria-hidden="true">04</span>
+              <span class="card__play" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M9 6.5l9 5.5-9 5.5V6.5z" fill="currentColor" /></svg>
+              </span>
+            </span>
+            <span class="card__foot">
+              <span class="card__name">Reel 04</span>
+              <span class="card__cta">Play<span class="sr-only"> Reel 04</span></span>
+            </span>
+          </a>
+        </li>
+
+        <li class="work__item" style="--rot:-1.9deg; --shift:1.1rem">
+          <a class="card" data-cursor="Play" href="https://www.instagram.com/reel/DWYA51ok0i7/"
+             target="_blank" rel="noopener noreferrer"
+             data-reel="DWYA51ok0i7" data-title="Reel 05" data-tone="5">
+            <span class="card__media">
+              <!-- alt is empty: the card's own "Reel 05 / Play" text already
+                   names this link, so a description here would just repeat it. -->
+              <img class="card__img" src="assets/thumbnail/reel-05.jpg" alt=""
+                   width="640" height="1136" loading="lazy" decoding="async" />
+              <span class="card__scrim" aria-hidden="true"></span>
+              <span class="card__index" aria-hidden="true">05</span>
+              <span class="card__play" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M9 6.5l9 5.5-9 5.5V6.5z" fill="currentColor" /></svg>
+              </span>
+            </span>
+            <span class="card__foot">
+              <span class="card__name">Reel 05</span>
+              <span class="card__cta">Play<span class="sr-only"> Reel 05</span></span>
+            </span>
+          </a>
+        </li>
+
+        <li class="work__item" style="--rot:1.1deg; --shift:-2.0rem">
+          <a class="card" data-cursor="Play" href="https://www.instagram.com/reel/DRtXbeEkr6q/"
+             target="_blank" rel="noopener noreferrer"
+             data-reel="DRtXbeEkr6q" data-title="Reel 06" data-tone="1">
+            <span class="card__media">
+              <!-- alt is empty: the card's own "Reel 06 / Play" text already
+                   names this link, so a description here would just repeat it. -->
+              <img class="card__img" src="assets/thumbnail/reel-06.jpg" alt=""
+                   width="640" height="1136" loading="lazy" decoding="async" />
+              <span class="card__scrim" aria-hidden="true"></span>
+              <span class="card__index" aria-hidden="true">06</span>
+              <span class="card__play" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M9 6.5l9 5.5-9 5.5V6.5z" fill="currentColor" /></svg>
+              </span>
+            </span>
+            <span class="card__foot">
+              <span class="card__name">Reel 06</span>
+              <span class="card__cta">Play<span class="sr-only"> Reel 06</span></span>
+            </span>
+          </a>
+        </li>
+
+        <li class="work__item" style="--rot:-2.8deg; --shift:0.8rem">
+          <a class="card" data-cursor="Play" href="https://www.instagram.com/reel/DRbI0_gkodp/"
+             target="_blank" rel="noopener noreferrer"
+             data-reel="DRbI0_gkodp" data-title="Reel 07" data-tone="3">
+            <span class="card__media">
+              <!-- alt is empty: the card's own "Reel 07 / Play" text already
+                   names this link, so a description here would just repeat it. -->
+              <img class="card__img" src="assets/thumbnail/reel-07.jpg" alt=""
+                   width="640" height="1136" loading="lazy" decoding="async" />
+              <span class="card__scrim" aria-hidden="true"></span>
+              <span class="card__index" aria-hidden="true">07</span>
+              <span class="card__play" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M9 6.5l9 5.5-9 5.5V6.5z" fill="currentColor" /></svg>
+              </span>
+            </span>
+            <span class="card__foot">
+              <span class="card__name">Reel 07</span>
+              <span class="card__cta">Play<span class="sr-only"> Reel 07</span></span>
+            </span>
+          </a>
+        </li>
+
+        <li class="work__item" style="--rot:1.7deg; --shift:-1.6rem">
+          <a class="card" data-cursor="Play" href="https://www.instagram.com/reel/DRRKjndEtWf/"
+             target="_blank" rel="noopener noreferrer"
+             data-reel="DRRKjndEtWf" data-title="Reel 08" data-tone="2">
+            <span class="card__media">
+              <!-- alt is empty: the card's own "Reel 08 / Play" text already
+                   names this link, so a description here would just repeat it. -->
+              <img class="card__img" src="assets/thumbnail/reel-08.jpg" alt=""
+                   width="640" height="1136" loading="lazy" decoding="async" />
+              <span class="card__scrim" aria-hidden="true"></span>
+              <span class="card__index" aria-hidden="true">08</span>
+              <span class="card__play" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M9 6.5l9 5.5-9 5.5V6.5z" fill="currentColor" /></svg>
+              </span>
+            </span>
+            <span class="card__foot">
+              <span class="card__name">Reel 08</span>
+              <span class="card__cta">Play<span class="sr-only"> Reel 08</span></span>
+            </span>
+          </a>
+        </li>
+
+        <li class="work__item" style="--rot:-1.3deg; --shift:2.4rem">
+          <a class="card" data-cursor="Play" href="https://www.instagram.com/reel/DSboGwZkuJA/"
+             target="_blank" rel="noopener noreferrer"
+             data-reel="DSboGwZkuJA" data-title="Reel 09" data-tone="5">
+            <span class="card__media">
+              <!-- alt is empty: the card's own "Reel 09 / Play" text already
+                   names this link, so a description here would just repeat it. -->
+              <img class="card__img" src="assets/thumbnail/reel-09.jpg" alt=""
+                   width="640" height="1136" loading="lazy" decoding="async" />
+              <span class="card__scrim" aria-hidden="true"></span>
+              <span class="card__index" aria-hidden="true">09</span>
+              <span class="card__play" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M9 6.5l9 5.5-9 5.5V6.5z" fill="currentColor" /></svg>
+              </span>
+            </span>
+            <span class="card__foot">
+              <span class="card__name">Reel 09</span>
+              <span class="card__cta">Play<span class="sr-only"> Reel 09</span></span>
+            </span>
+          </a>
+        </li>
+
+        <li class="work__item" style="--rot:2.4deg; --shift:-1.0rem">
+          <a class="card" data-cursor="Play" href="https://www.instagram.com/reel/Da_zmCLzUem/"
+             target="_blank" rel="noopener noreferrer"
+             data-reel="Da_zmCLzUem" data-title="Reel 10" data-tone="4">
+            <span class="card__media">
+              <!-- alt is empty: the card's own "Reel 10 / Play" text already
+                   names this link, so a description here would just repeat it. -->
+              <img class="card__img" src="assets/thumbnail/reel-10.jpg" alt=""
+                   width="1290" height="2294" loading="lazy" decoding="async" />
+              <span class="card__scrim" aria-hidden="true"></span>
+              <span class="card__index" aria-hidden="true">10</span>
+              <span class="card__play" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M9 6.5l9 5.5-9 5.5V6.5z" fill="currentColor" /></svg>
+              </span>
+            </span>
+            <span class="card__foot">
+              <span class="card__name">Reel 10</span>
+              <span class="card__cta">Play<span class="sr-only"> Reel 10</span></span>
+            </span>
+          </a>
+        </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         SERVICES — numbered rows with hairline dividers
+         ============================================================ -->
+    <section class="section services" id="services">
+      <div class="section__head">
+        <p class="label" data-reveal>03 — Services</p>
+      </div>
+
+      <h2 class="h2 services__title" data-reveal data-parallax="-0.05">A dual skill set.</h2>
+
+      <ul class="services__list">
+        <li class="service" data-reveal>
+          <span class="service__num">01</span>
+          <h3 class="service__name">Content Creation &amp; Video Production</h3>
+          <p class="service__desc">
+            End-to-end short-form video: concepting, shooting, editing and captioning
+            educational and promotional content built for the feed.
+          </p>
+        </li>
+        <li class="service" data-reveal>
+          <span class="service__num">02</span>
+          <h3 class="service__name">Brand Engagement Strategy</h3>
+          <p class="service__desc">
+            Content calendars, audience insight and community response that turn a
+            passive following into an active one.
+          </p>
+        </li>
+        <li class="service" data-reveal>
+          <span class="service__num">03</span>
+          <h3 class="service__name">Targeted Promotional Campaigns</h3>
+          <p class="service__desc">
+            Campaign creative aimed at a defined audience and a defined outcome —
+            launches, seasonal offers and treatment promotions.
+          </p>
+        </li>
+        <li class="service" data-reveal>
+          <span class="service__num">04</span>
+          <h3 class="service__name">Operations &amp; Partnership Sourcing</h3>
+          <p class="service__desc">
+            Inventory management, supplier research and vendor negotiation that keeps
+            costs down and delivery predictable.
+          </p>
+        </li>
+      </ul>
+    </section>
+
+    <!-- ============================================================
+         CONTACT — direct channels, no form
+         ============================================================ -->
+    <section class="section contact" id="contact">
+      <div class="section__head">
+        <p class="label" data-reveal>04 — Contact</p>
+      </div>
+
+      <div class="contact__grid">
+        <div class="contact__intro" data-reveal data-parallax="-0.05">
+          <h2 class="h2">Let's make<br />something.</h2>
+          <p class="lead">
+            Tell me about the brand, the audience and the timeline — I'll come back
+            with a plan.
+          </p>
+        </div>
+
+        <div class="contact__actions" data-reveal>
+          <a class="btn btn--solid" href="mailto:wydiakris@gmail.com?subject=Project%20enquiry">
+            <span>Email Wydia</span>
+            <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+              <path d="M3 13L13 3M13 3H5.5M13 3v7.5" fill="none" stroke="currentColor" stroke-width="1.4" />
+            </svg>
+          </a>
+          <a class="btn btn--outline" href="https://wa.me/6282116569064"
+             target="_blank" rel="noopener noreferrer">
+            <span>WhatsApp</span>
+            <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+              <path d="M3 13L13 3M13 3H5.5M13 3v7.5" fill="none" stroke="currentColor" stroke-width="1.4" />
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Explicit contact details -->
+      <ul class="contact__details">
+        <li data-reveal>
+          <p class="label">Email</p>
+          <a class="contact__value hover-line" href="mailto:wydiakris@gmail.com">wydiakris@gmail.com</a>
+        </li>
+        <li data-reveal>
+          <p class="label">Phone</p>
+          <a class="contact__value hover-line" href="tel:+6282116569064">082116569064</a>
+        </li>
+        <li data-reveal>
+          <p class="label">Location</p>
+          <p class="contact__value">Batulicin, Indonesia</p>
+        </li>
+      </ul>
+    </section>
+  </main>
+
+  <!-- ============================================================
+       FOOTER
+       ============================================================ -->
+  <footer class="footer">
+    <p class="footer__wordmark" data-parallax-x="0.12" aria-hidden="true">Wydia Kristiany</p>
+    <div class="footer__bar">
+      <p>© <span id="year">2026</span> Wydia Kristiany</p>
+      <a class="hover-line" href="#top">Back to top</a>
+    </div>
+  </footer>
+
+  <!-- ============================================================
+       REEL LIGHTBOX
+       Empty on load. script.js injects exactly one <iframe> when a card is
+       clicked and removes it on close, so playback happens in-page without
+       ten embeds ever existing at once.
+       ============================================================ -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true"
+       aria-label="Instagram reel player" hidden>
+    <div class="lightbox__scrim" data-lightbox-close data-cursor="Close"></div>
+
+    <div class="lightbox__panel">
+      <div class="lightbox__bar">
+        <p id="lightboxTitle">Reel</p>
+        <button class="lightbox__close" type="button" id="lightboxClose" data-lightbox-close>
+          <span>Close</span>
+          <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+            <path d="M3 3l10 10M13 3L3 13" fill="none" stroke="currentColor" stroke-width="1.4" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="lightbox__frame" id="lightboxFrame">
+        <span class="lightbox__spinner" aria-hidden="true"></span>
+      </div>
+
+      <div class="lightbox__foot">
+        <span>Instagram embed</span>
+        <a id="lightboxLink" href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer">
+          Open on Instagram ↗
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       CUSTOM CURSOR
+       Two layers: a dot that tracks the pointer exactly and a hairline ring
+       that eases after it. Both use mix-blend-mode: difference — the same
+       trick the reference site uses on its video controls — so a single cream
+       cursor stays legible over the cream page and the dark reel cards alike.
+       Injected only on fine-pointer devices; touch keeps its native behaviour.
+       ============================================================ -->
+  <div class="cursor" aria-hidden="true">
+    <span class="cursor__ring" id="cursorRing">
+      <span class="cursor__label" id="cursorLabel"></span>
+    </span>
+    <span class="cursor__dot" id="cursorDot"></span>
+  </div>
+
+  <script src="script.js" defer></script>
+</body>
+</html>

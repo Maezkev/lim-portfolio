@@ -1,0 +1,1451 @@
+/* =============================================================================
+   Wydia Kristiany — Portfolio
+   Vanilla CSS. Mobile-first. Light theme.
+
+   Design system lifted from the reference site (fromanother.love) and inverted
+   to a light ground, keeping every proportion and component rule intact:
+     · Palette      #fffde2 cream ground / #051236 navy ink / #1740a9 blue accent
+     · Type         neutral grotesque, uppercase display at weight 600,
+                    line-height .9em with negative letter-spacing
+     · Rhythm       fluid 10px-basis rem, 6 / 8 / 14 column grid,
+                    --padding-x of 1.6 / 3.2 / 4.8rem
+     · Components   hairline 1px borders, radius 0 / .2 / .4rem / 9999px pills,
+                    easeOutQuart transitions, opacity-.6 hovers
+
+   Contents
+     01  Tokens
+     02  Fluid rem + reset
+     03  Typography primitives
+     04  Buttons & link underline
+     05  Layout / sections
+     06  Header + mobile menu
+     07  Hero
+     08  Marquee
+     09  About
+     10  Showcase grid
+     11  Reel lightbox
+     12  Services
+     13  Contact
+     14  Footer
+     15  Reveal, parallax & reduced motion
+   ========================================================================== */
+
+/* -----------------------------------------------------------------------------
+   01  TOKENS
+   -------------------------------------------------------------------------- */
+:root {
+  /* Palette — cream is now the ground, navy the ink */
+  --cream: #fffde2;
+  --navy: #051236;
+  --blue: #1740a9;
+
+  /* Pastel pink accent — used only for the background blooms */
+  --pink: 255, 168, 196;
+  --pink-light: 255, 205, 222;
+
+  --ground: var(--cream);
+  --ink: var(--navy);
+  --ink-secondary: rgba(5, 18, 54, 0.62);
+  --ink-disabled: rgba(5, 18, 54, 0.34);
+  --hairline: rgba(5, 18, 54, 0.22);
+  --hairline-soft: rgba(5, 18, 54, 0.1);
+  --alert: #c8402a;
+
+  /* Type */
+  --font-sans: "Inter Tight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-serif: "Instrument Serif", "Times New Roman", Times, serif;
+
+  /* Easing — same curves as the reference */
+  --easeOutQuart: cubic-bezier(0.165, 0.84, 0.44, 1);
+  --easeInOutQuart: cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+/* Responsive grid + gutter tokens, stepped at the reference's breakpoints */
+body {
+  --gap-x: 1.6rem;
+  --padding-x: 1.6rem;
+  --columns: 6;
+
+  /* No TOC gutter until 1200px, where the nav appears */
+  --toc-w: 0rem;
+  --toc-gap: 0rem;
+}
+@media (min-width: 768px) {
+  body {
+    --gap-x: 3.2rem;
+    --padding-x: 3.2rem;
+    --columns: 8;
+  }
+}
+@media (min-width: 1200px) {
+  body {
+    --gap-x: 2.4rem;
+    --padding-x: 4.8rem;
+    --columns: 14;
+
+    /* Left gutter reserved for the table of contents, and the margin between
+       the page edge and the nav itself. Both are 0 below this width, where the
+       TOC is hidden. */
+    --toc-w: 15rem;
+    --toc-gap: 3.2rem;
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   02  FLUID REM + RESET
+
+   The reference scales its entire design off the viewport width so proportions
+   hold at every size: max(2.6666vw,1px) → 10px at its 375px mobile artboard,
+   max(1.302vw,1px) → 10px at 768, max(.5208vw,1px) → 10px at 1920.
+   Reproduced here with clamps at both ends so the basis can't run away on
+   unusually wide phones or shrink to unreadable sizes just past 1200px.
+   -------------------------------------------------------------------------- */
+html {
+  font-size: clamp(1px, 2.6666666667vw, 12px); /* 375px artboard → 10px */
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  scroll-behavior: smooth;
+  background-color: var(--ground);
+}
+@media (min-width: 768px) {
+  html { font-size: clamp(1px, 1.3020833333vw, 13px); } /* 768 artboard → 10px */
+}
+@media (min-width: 1200px) {
+  html { font-size: clamp(7.5px, 0.5208333333vw, 13px); } /* 1920 artboard → 10px */
+}
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+* { margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-sans);
+  font-size: 1.6rem;
+  font-weight: 400;
+  line-height: 140%;
+  letter-spacing: -0.032rem;
+  color: var(--ink);
+  background-color: var(--ground);
+  overflow-x: hidden;
+  /* Containing block for the full-height .accents layer below */
+  position: relative;
+}
+
+body.is-locked { overflow: hidden; }
+
+img,
+svg,
+video,
+iframe { display: block; max-width: 100%; }
+
+ul, ol { list-style: none; }
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+  color: inherit;
+  letter-spacing: inherit;
+}
+
+button {
+  background: none;
+  border: 0;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+::selection {
+  background: var(--ink);
+  color: var(--ground);
+}
+
+/* Visible focus for keyboard users only */
+:focus-visible {
+  outline: 1px solid var(--ink);
+  outline-offset: 0.4rem;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.skip-link {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 1000;
+  padding: 1rem 1.6rem;
+  background: var(--ink);
+  color: var(--ground);
+  font-size: 1.4rem;
+  transform: translateY(-200%);
+  transition: transform 0.2s var(--easeOutQuart);
+}
+.skip-link:focus { transform: translateY(0); }
+
+/* -----------------------------------------------------------------------------
+   BACKGROUND ACCENTS
+
+   Eight pastel-pink blooms spanning the full document height, so the wash runs
+   continuously from the hero to the footer rather than sitting in a few spots.
+
+   The edges are feathered two ways: a five-stop radial gradient whose tail
+   reaches all the way to 100% (no visible termination anywhere), plus a real
+   `filter: blur()` on top. The layer is positioned absolutely inside <body>
+   rather than fixed, so it scrolls with the page and the blur composites once
+   instead of repainting every frame.
+   -------------------------------------------------------------------------- */
+.accents {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;      /* clips the blobs so they never cause a scrollbar */
+  pointer-events: none;
+}
+
+.accents__blob {
+  --a: 0.4;              /* centre alpha; every stop is derived from it */
+  position: absolute;
+  display: block;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(var(--pink), var(--a)) 0%,
+    rgba(var(--pink), calc(var(--a) * 0.62)) 26%,
+    rgba(var(--pink-light), calc(var(--a) * 0.34)) 50%,
+    rgba(var(--pink-light), calc(var(--a) * 0.12)) 74%,
+    rgba(255, 253, 226, 0) 100%
+  );
+  filter: blur(3rem);
+}
+@media (min-width: 1024px) {
+  .accents__blob { filter: blur(7rem); }
+}
+
+/* Distributed down the page, alternating sides. Percentages are of the whole
+   document, so the spacing scales if sections are added or removed. */
+.accents__blob--1 { top: -8%;  right: -16vmax; width: 76vmax; height: 76vmax; --a: 0.46; }
+.accents__blob--2 { top: 8%;   left: -24vmax;  width: 60vmax; height: 60vmax; --a: 0.34; }
+.accents__blob--3 { top: 21%;  right: -12vmax; width: 58vmax; height: 58vmax; --a: 0.40; }
+.accents__blob--4 { top: 35%;  left: -18vmax;  width: 66vmax; height: 66vmax; --a: 0.32; }
+.accents__blob--5 { top: 49%;  right: -20vmax; width: 68vmax; height: 68vmax; --a: 0.42; }
+.accents__blob--6 { top: 63%;  left: -16vmax;  width: 58vmax; height: 58vmax; --a: 0.34; }
+.accents__blob--7 { top: 77%;  right: -14vmax; width: 62vmax; height: 62vmax; --a: 0.38; }
+
+/* Closing bloom over the contact block and footer — pink layered over a hint
+   of the blue accent, so the page cools very slightly at the end */
+.accents__blob--8 {
+  bottom: -10%;
+  left: -18vmax;
+  width: 72vmax;
+  height: 72vmax;
+  --a: 0.4;
+  background:
+    radial-gradient(circle at 58% 42%, rgba(23, 64, 169, 0.07) 0%, rgba(255, 253, 226, 0) 62%),
+    radial-gradient(circle at 50% 50%,
+      rgba(var(--pink), var(--a)) 0%,
+      rgba(var(--pink), calc(var(--a) * 0.6)) 28%,
+      rgba(var(--pink-light), calc(var(--a) * 0.3)) 54%,
+      rgba(var(--pink-light), calc(var(--a) * 0.1)) 78%,
+      rgba(255, 253, 226, 0) 100%);
+}
+
+/* -----------------------------------------------------------------------------
+   03  TYPOGRAPHY PRIMITIVES
+   -------------------------------------------------------------------------- */
+
+/* Display heading — uppercase 600 at .9em leading, tracked in */
+.h2 {
+  font-size: 3.2rem;
+  font-weight: 600;
+  line-height: 0.9em;
+  letter-spacing: -0.096rem;
+  text-transform: uppercase;
+}
+@media (min-width: 768px) {
+  .h2 { font-size: 4.8rem; letter-spacing: -0.144rem; }
+}
+@media (min-width: 1200px) {
+  .h2 { font-size: 6.4rem; letter-spacing: -0.192rem; }
+}
+
+/* Small italic serif caption — the reference's Herbik label idiom */
+.label {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.4rem;
+  line-height: 0.9em;
+  letter-spacing: normal;
+  color: var(--ink-secondary);
+}
+@media (min-width: 1200px) {
+  .label { font-size: 1.6rem; }
+}
+
+.lead {
+  font-size: 1.6rem;
+  line-height: 140%;
+  letter-spacing: -0.032rem;
+  color: var(--ink-secondary);
+}
+@media (min-width: 1200px) {
+  .lead { font-size: 1.8rem; letter-spacing: -0.036rem; }
+}
+
+/* -----------------------------------------------------------------------------
+   04  BUTTONS & LINK UNDERLINE
+   -------------------------------------------------------------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-size: 1.4rem;
+  font-weight: 500;
+  line-height: 1em;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: background-color 0.4s var(--easeOutQuart),
+              color 0.4s var(--easeOutQuart),
+              opacity 0.2s var(--easeOutQuart);
+}
+.btn svg {
+  width: 1.2rem;
+  height: 1.2rem;
+  flex-shrink: 0;
+  transition: transform 0.4s var(--easeOutQuart);
+}
+.btn:hover svg { transform: translate(0.2rem, -0.2rem); }
+
+/* Hairline outlined rectangle — radius 0, as on the reference */
+.btn--outline {
+  padding: 1.6rem 2.4rem;
+  border: 1px solid var(--ink);
+  border-radius: 0;
+}
+.btn--outline:hover {
+  background-color: var(--ink);
+  color: var(--ground);
+}
+
+/* Pill — the reference's 9999px radius variant, used in the header */
+.btn--pill {
+  padding: 1.1rem 2rem;
+  border: 1px solid var(--ink);
+  border-radius: 9999px;
+  font-size: 1.2rem;
+}
+.btn--pill:hover {
+  background-color: var(--ink);
+  color: var(--ground);
+}
+
+/* Filled — inverted, fades on hover */
+.btn--solid {
+  padding: 1.6rem 2.4rem;
+  background-color: var(--ink);
+  color: var(--ground);
+  border-radius: 0;
+}
+.btn--solid:hover { opacity: 0.7; }
+
+/*
+  Underline-on-hover, reproducing the reference's `.hover_line` gradient wipe:
+  a 1px linear-gradient sized from 0% to 100% of the inline box.
+*/
+.hover-line {
+  --p: 0%;
+  --size: 1px;
+  display: inline;
+  background-image: linear-gradient(currentColor 0 0);
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: var(--p) var(--size);
+  padding-bottom: 0.2rem;
+  transition: background-size 0.4s var(--easeOutQuart);
+}
+.hover-line:hover { --p: 100%; }
+
+/* -----------------------------------------------------------------------------
+   05  LAYOUT / SECTIONS
+   -------------------------------------------------------------------------- */
+.section {
+  padding: 10rem var(--padding-x);
+}
+@media (min-width: 768px) {
+  .section { padding: 12rem var(--padding-x); }
+}
+@media (min-width: 1200px) {
+  .section { padding: 17.4rem var(--padding-x) 12rem; }
+}
+
+/* Eyebrow row: uppercase tracked label + optional right-aligned note */
+.section__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--gap-x);
+  padding-top: 1.6rem;
+  padding-bottom: 1.6rem;
+  margin-bottom: 4.8rem;
+  border-top: 1px solid var(--hairline);
+}
+.section__head .label {
+  font-family: var(--font-sans);
+  font-style: normal;
+  font-size: 1.2rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink-secondary);
+}
+.section__note {
+  font-size: 1.2rem;
+  letter-spacing: 0.02em;
+  color: var(--ink-disabled);
+  text-align: right;
+}
+
+/* -----------------------------------------------------------------------------
+   CUSTOM CURSOR
+
+   Built from the same parts as the rest of the site: a hairline 1px ring, an
+   uppercase tracked label, easeOutQuart on every transition.
+
+   Both layers use `mix-blend-mode: difference` — lifted from the reference's
+   video controls — so one cream-coloured cursor reads correctly on the cream
+   page *and* on the dark reel cards without any per-context colour swapping.
+
+   Gated three ways: the .js class (no dead markup without scripting), the
+   `has-cursor` class that script.js only sets on fine-pointer devices, and a
+   hover/pointer media query. Touch input never loses its native behaviour.
+   -------------------------------------------------------------------------- */
+.cursor { display: none; }
+
+@media (hover: hover) and (pointer: fine) {
+  .js.has-cursor .cursor { display: block; }
+
+  /* Suppress the native pointer only while ours is actually active — the class
+     is dropped whenever the lightbox is open, so the Instagram embed behaves
+     normally. */
+  .js.has-cursor body,
+  .js.has-cursor body * { cursor: none; }
+}
+
+.cursor__dot,
+.cursor__ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  pointer-events: none;
+  mix-blend-mode: difference;
+  will-change: transform;
+}
+
+/* Tracks the pointer exactly */
+.cursor__dot {
+  width: 0.6rem;
+  height: 0.6rem;
+  margin: -0.3rem 0 0 -0.3rem;
+  border-radius: 50%;
+  background: var(--cream);
+  transform: translate3d(var(--x, -100px), var(--y, -100px), 0);
+  transition: opacity 0.3s var(--easeOutQuart);
+}
+
+/* Eases after it, and carries the contextual label */
+.cursor__ring {
+  --size: 3.2rem;
+  display: grid;
+  place-items: center;
+  width: var(--size);
+  height: var(--size);
+  margin: calc(var(--size) / -2) 0 0 calc(var(--size) / -2);
+  border: 1px solid var(--cream);
+  border-radius: 50%;
+  color: var(--cream);
+  transform: translate3d(var(--x, -100px), var(--y, -100px), 0) scale(var(--scale, 1));
+  transition: width 0.45s var(--easeOutQuart),
+              height 0.45s var(--easeOutQuart),
+              margin 0.45s var(--easeOutQuart),
+              opacity 0.3s var(--easeOutQuart);
+}
+
+.cursor__label {
+  font-size: 1.1rem;
+  font-weight: 500;
+  line-height: 1em;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.3s var(--easeOutQuart);
+}
+
+/* --- States ------------------------------------------------------------- */
+
+/* Over any link or button: the ring opens up and the dot steps aside */
+.cursor.is-link .cursor__ring { --size: 5.6rem; }
+.cursor.is-link .cursor__dot { opacity: 0; }
+
+/* Over a labelled target (reel cards, lightbox scrim): larger still, filled,
+   with the label showing */
+.cursor.is-labelled .cursor__ring {
+  --size: 8.4rem;
+  background: var(--cream);
+  color: var(--navy);
+}
+.cursor.is-labelled .cursor__label { opacity: 1; }
+.cursor.is-labelled .cursor__dot { opacity: 0; }
+
+/* Pressed */
+.cursor.is-down .cursor__ring { --scale: 0.86; }
+
+/* Pointer outside the window */
+.cursor.is-out .cursor__ring,
+.cursor.is-out .cursor__dot { opacity: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  /* Keep the cursor, drop the easing — the ring snaps to the pointer instead
+     of trailing it. */
+  .cursor__ring { transition: opacity 0.3s linear; }
+}
+
+/* -----------------------------------------------------------------------------
+   TABLE OF CONTENTS
+
+   Fixed section index living in the left gutter, vertically centred. Only the
+   entry currently in view shows its rule and label — the rest stay as dimmed
+   numerals, as on the reference site.
+
+   The gutter it occupies is reserved by --toc-w (declared on body in § 01),
+   which every full-width block adds to its left padding. Below 1200px there is
+   no room for a vertical rail, so --toc-w is 0 and the nav is hidden; the
+   header nav and mobile menu already cover the same links there.
+   -------------------------------------------------------------------------- */
+.toc {
+  display: none;
+}
+
+@media (min-width: 1200px) {
+  .toc {
+    position: fixed;
+    top: 50%;
+    /* --toc-gap is the breathing room between the page edge and the numerals */
+    left: calc(var(--padding-x) + var(--toc-gap));
+    transform: translateY(-50%);
+    z-index: 80;
+    display: block;
+    transition: opacity 0.5s var(--easeOutQuart),
+                transform 0.5s var(--easeOutQuart),
+                visibility 0.5s;
+  }
+
+  /* Held back over the hero — the headline gets the left edge to itself — then
+     faded in from the moment the next section takes over. `visibility` also
+     drops the links out of the tab order while they are invisible. */
+  .toc.is-hidden {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-50%) translateX(-1.2rem);
+    pointer-events: none;
+  }
+
+  /* Without JS nothing toggles the class above, so the nav stays put. */
+  .no-js .toc.is-hidden {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(-50%);
+    pointer-events: auto;
+  }
+
+  .toc ol {
+    display: grid;
+    gap: 1.4rem;
+  }
+
+  .toc__item a {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    font-size: 1.2rem;
+    line-height: 1em;
+    color: var(--ink-disabled);
+    transition: color 0.5s var(--easeOutQuart);
+  }
+  .toc__item a:hover { color: var(--ink-secondary); }
+
+  .toc__dash {
+    width: 0;
+    height: 1px;
+    background: currentColor;
+    transition: width 0.5s var(--easeOutQuart);
+  }
+
+  .toc__label {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 1.4rem;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.5s var(--easeOutQuart);
+  }
+
+  /* Active entry: ink colour, extended rule, visible label */
+  .toc__item.is-active a { color: var(--ink); }
+  .toc__item.is-active .toc__dash { width: 2.4rem; }
+  .toc__item.is-active .toc__label { opacity: 1; }
+
+  /* Reserve the gutter so no content sits under the nav */
+  .section,
+  .hero,
+  .footer {
+    padding-left: calc(var(--padding-x) + var(--toc-w));
+  }
+
+  /* The gallery stays full-bleed, so its negative margin has to grow to match */
+  .work__scroller {
+    margin-left: calc((var(--padding-x) + var(--toc-w)) * -1);
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   06  HEADER + MOBILE MENU
+   -------------------------------------------------------------------------- */
+.header {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 100;
+  padding: 1.6rem var(--padding-x);
+  border-bottom: 1px solid transparent;
+  transition: background-color 0.4s var(--easeOutQuart),
+              border-color 0.4s var(--easeOutQuart);
+}
+/* Frosts once the hero is behind us (toggled in script.js) */
+.header.is-stuck {
+  background-color: rgba(255, 253, 226, 0.86);
+  backdrop-filter: blur(1.2rem);
+  -webkit-backdrop-filter: blur(1.2rem);
+  border-bottom-color: var(--hairline-soft);
+}
+
+.header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-x);
+}
+
+.header__logo {
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+  font-size: 1.4rem;
+  font-weight: 600;
+  letter-spacing: -0.028rem;
+  text-transform: uppercase;
+}
+/* The wordmark is the whole logo now, so it shows at every width — the circular
+   "WK" mark that used to stand in for it on mobile is gone. */
+.header__logo-text { display: inline; }
+
+.header__nav {
+  display: none;
+  gap: 3.2rem;
+  font-size: 1.2rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+@media (min-width: 1024px) {
+  .header__nav { display: flex; }
+}
+
+.header__cta { display: none; }
+@media (min-width: 1024px) {
+  .header__cta { display: inline-flex; }
+}
+
+.header__toggle {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 1.2rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+@media (min-width: 1024px) {
+  .header__toggle { display: none; }
+}
+.header__toggle-bars {
+  display: grid;
+  gap: 0.5rem;
+  width: 2.2rem;
+}
+.header__toggle-bars i {
+  display: block;
+  height: 1px;
+  background: var(--ink);
+  transition: transform 0.4s var(--easeInOutQuart);
+}
+.header__toggle[aria-expanded="true"] .header__toggle-bars i:first-child {
+  transform: translateY(0.3rem) rotate(45deg);
+}
+.header__toggle[aria-expanded="true"] .header__toggle-bars i:last-child {
+  transform: translateY(-0.3rem) rotate(-45deg);
+}
+
+/* Full-screen overlay menu */
+.menu {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 4.8rem;
+  padding: 10rem var(--padding-x) 4.8rem;
+  background-color: var(--ground);
+}
+.menu[hidden] { display: none; }
+
+.menu__nav {
+  display: grid;
+  gap: 0.4rem;
+}
+.menu__nav a {
+  display: flex;
+  align-items: baseline;
+  gap: 1.6rem;
+  padding: 1.2rem 0;
+  border-bottom: 1px solid var(--hairline-soft);
+  font-size: 3.2rem;
+  font-weight: 600;
+  line-height: 0.9em;
+  letter-spacing: -0.096rem;
+  text-transform: uppercase;
+  transition: color 0.4s var(--easeOutQuart);
+}
+.menu__nav a:hover { color: var(--ink-secondary); }
+.menu__index {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.2rem;
+  font-weight: 400;
+  letter-spacing: normal;
+  text-transform: none;
+  color: var(--ink-disabled);
+}
+
+.menu__foot {
+  display: grid;
+  gap: 2.4rem;
+  font-size: 1.4rem;
+}
+.menu__foot .label { margin-bottom: 0.8rem; }
+@media (min-width: 768px) {
+  .menu__foot { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* -----------------------------------------------------------------------------
+   07  HERO
+   -------------------------------------------------------------------------- */
+.hero {
+  position: relative;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 12rem var(--padding-x) 1.6rem;
+  overflow: hidden;
+}
+
+/* No local bloom in the hero — the background accent layer (top of this file)
+   carries the wash here, so nothing is layered over it. */
+
+.hero__inner {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 3.2rem;
+}
+
+.hero__label { margin-bottom: -1.6rem; }
+
+.hero__title {
+  font-size: 4rem;
+  font-weight: 600;
+  line-height: 0.9em;
+  letter-spacing: -0.12rem;
+  text-transform: uppercase;
+}
+.hero__title-line { display: block; }
+@media (min-width: 768px) {
+  .hero__title { font-size: 6.4rem; letter-spacing: -0.192rem; }
+}
+@media (min-width: 1200px) {
+  .hero__title { font-size: 11rem; letter-spacing: -0.33rem; }
+  .hero__title-line:last-child { padding-left: 12rem; } /* offset second line */
+}
+
+.hero__bottom {
+  display: grid;
+  gap: 2.4rem;
+  align-items: end;
+}
+@media (min-width: 768px) {
+  .hero__bottom {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: var(--gap-x);
+  }
+}
+
+.hero__sub {
+  max-width: 34rem;
+  font-size: 1.8rem;
+  line-height: 130%;
+  letter-spacing: -0.036rem;
+  color: var(--ink-secondary);
+}
+@media (min-width: 1200px) {
+  .hero__sub { font-size: 2.4rem; max-width: 46rem; }
+}
+
+.hero__cta { justify-self: start; }
+
+.hero__meta {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1.6rem;
+  margin-top: 6.4rem;
+  padding-top: 1.6rem;
+  border-top: 1px solid var(--hairline);
+  font-size: 1.2rem;
+  letter-spacing: 0.02em;
+  color: var(--ink-secondary);
+}
+.hero__meta p { display: flex; align-items: center; gap: 0.8rem; }
+
+/* Pulsing availability dot */
+.hero__dot {
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 50%;
+  background: var(--blue);
+  animation: pulse 2.4s var(--easeInOutQuart) infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.25; }
+}
+
+.hero__scroll {
+  display: none;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+@media (min-width: 768px) {
+  .hero__scroll { display: block; }
+}
+
+/* -----------------------------------------------------------------------------
+   08  MARQUEE
+   -------------------------------------------------------------------------- */
+.marquee {
+  padding: 2rem 0;
+  border-top: 1px solid var(--hairline-soft);
+  border-bottom: 1px solid var(--hairline-soft);
+  overflow: hidden;
+  user-select: none;
+}
+.marquee__track {
+  display: flex;
+  width: max-content;
+  animation: marquee 40s linear infinite;
+}
+.marquee__group {
+  display: flex;
+  align-items: center;
+  gap: 2.4rem;
+  padding-right: 2.4rem;
+  font-size: 2rem;
+  font-weight: 600;
+  line-height: 1em;
+  letter-spacing: -0.06rem;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+@media (min-width: 1200px) {
+  .marquee__group { font-size: 3.2rem; gap: 3.2rem; padding-right: 3.2rem; }
+}
+.marquee__sep { color: var(--ink-disabled); font-size: 0.6em; }
+
+@keyframes marquee {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+
+/* -----------------------------------------------------------------------------
+   09  ABOUT
+   -------------------------------------------------------------------------- */
+.about__grid {
+  display: grid;
+  gap: 4.8rem;
+}
+@media (min-width: 1024px) {
+  .about__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--gap-x);
+    align-items: start;
+  }
+}
+
+.about__body {
+  display: grid;
+  gap: 4.8rem;
+}
+
+.about__facts {
+  display: grid;
+  gap: 2.4rem;
+}
+.about__facts li {
+  padding-top: 1.6rem;
+  border-top: 1px solid var(--hairline-soft);
+  font-size: 1.4rem;
+}
+.about__facts .label { margin-bottom: 0.8rem; }
+@media (min-width: 768px) {
+  .about__facts {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--gap-x);
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   10  SHOWCASE GRID
+   Still zero iframes at load: each tile is a CSS-only 9:16 poster. Clicking one
+   mounts a single Instagram embed inside the lightbox (section 11).
+   -------------------------------------------------------------------------- */
+.work__title { margin-bottom: 4.8rem; max-width: 24ch; }
+
+/* Full-bleed: the gallery escapes the section's side padding */
+.work__scroller {
+  position: relative;
+  margin: 0 calc(var(--padding-x) * -1);
+}
+
+/* --- Base behaviour: a native swipeable carousel -------------------------
+   This is what mobile, touch, no-JS and reduced-motion visitors get. The
+   pinned desktop treatment below is layered on top by script.js. */
+.work__track {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-x);
+  padding: 2rem var(--padding-x);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.work__track::-webkit-scrollbar { display: none; }
+
+.work__item {
+  flex: 0 0 auto;
+  width: 66vw;
+  max-width: 32rem;
+  scroll-snap-align: center;
+  /* Each card sits at its own slight angle and vertical offset, so the row
+     reads as scattered prints rather than a tidy strip. */
+  transform: rotate(var(--rot, 0deg)) translateY(var(--shift, 0));
+  transition: transform 0.6s var(--easeOutQuart);
+}
+/* Straighten on hover — the card being looked at squares up to the reader */
+@media (hover: hover) {
+  .work__item:hover { transform: rotate(0deg) translateY(var(--shift, 0)); }
+}
+
+/* --- Pinned mode: added by script.js at >=1024px -------------------------
+   The scroller is given an explicit height (viewport + horizontal overflow),
+   the stage sticks to the top, and --tx slides the track sideways as the
+   section passes through. */
+.work__scroller.is-pinned .work__stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.work__scroller.is-pinned .work__track {
+  overflow: visible;
+  scroll-snap-type: none;
+  padding: 0 0 0 14vw;                 /* opening inset, mirrors the reference */
+  transform: translate3d(var(--tx, 0px), 0, 0);
+  will-change: transform;
+}
+
+.work__scroller.is-pinned .work__item {
+  width: auto;
+  max-width: none;
+}
+
+/* Height-driven sizing: the 9:16 ratio derives the width, so the track's
+   total length follows the viewport height. */
+.work__scroller.is-pinned .card__media {
+  height: 58svh;
+  width: auto;
+}
+
+.card {
+  display: block;
+  cursor: pointer;
+  transition: opacity 0.4s var(--easeOutQuart);
+}
+
+/* No parallax in this section — the tiles only move on hover, so the transform
+   eases rather than tracking the scroll. */
+.card__media {
+  --lift: 0px;
+  position: relative;
+  display: block;
+  aspect-ratio: 9 / 16;          /* vertical reel format */
+  border-radius: 0.4rem;
+  border: 1px solid var(--hairline-soft);
+  overflow: hidden;
+  transform: translate3d(0, var(--lift), 0);
+  transition: transform 0.6s var(--easeOutQuart),
+              border-color 0.4s var(--easeOutQuart);
+}
+
+/* Tonal gradients drawn from the navy/blue palette — the tiles stay dark so
+   they read as video against the cream page */
+.card[data-tone="1"] .card__media { background: linear-gradient(160deg, #0a1f4d 0%, #051236 62%, #030b23 100%); }
+.card[data-tone="2"] .card__media { background: linear-gradient(200deg, #1740a9 0%, #0a1c46 58%, #051236 100%); }
+.card[data-tone="3"] .card__media { background: linear-gradient(140deg, #051236 0%, #10306f 55%, #061530 100%); }
+.card[data-tone="4"] .card__media { background: linear-gradient(180deg, #0d2559 0%, #1740a9 45%, #04102f 100%); }
+.card[data-tone="5"] .card__media { background: linear-gradient(220deg, #061631 0%, #123b8f 70%, #051236 100%); }
+
+/* The reel cover frame. The gradient above stays behind it as the loading
+   placeholder, so a slow or missing image never leaves an empty box. */
+.card__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transform: scale(1.001);   /* hides sub-pixel edges against the radius */
+  transition: transform 0.8s var(--easeOutQuart),
+              filter 0.6s var(--easeOutQuart);
+}
+
+/* Bottom-weighted scrim so the index numeral and play icon stay legible over
+   any cover frame, however bright */
+.card__scrim {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to top, rgba(5, 18, 54, 0.72) 0%, rgba(5, 18, 54, 0) 52%),
+    radial-gradient(circle at 50% 45%, rgba(5, 18, 54, 0.34) 0%, rgba(5, 18, 54, 0) 62%);
+  transition: opacity 0.6s var(--easeOutQuart);
+}
+
+.card__index {
+  position: absolute;
+  bottom: 1.6rem;
+  left: 1.6rem;
+  font-size: 4.8rem;
+  font-weight: 600;
+  line-height: 0.85em;
+  letter-spacing: -0.144rem;
+  color: rgba(255, 253, 226, 0.22);
+  transition: color 0.6s var(--easeOutQuart);
+}
+
+/* Centred play affordance — 6rem hairline circle, matching the reference's
+   video controller button */
+.card__play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: grid;
+  place-items: center;
+  width: 6rem;
+  height: 6rem;
+  border: 1px solid rgba(255, 253, 226, 0.4);
+  border-radius: 50%;
+  background: rgba(5, 18, 54, 0.25);
+  backdrop-filter: blur(0.4rem);
+  -webkit-backdrop-filter: blur(0.4rem);
+  color: var(--cream);
+  transition: transform 0.5s var(--easeOutQuart),
+              background-color 0.4s var(--easeOutQuart),
+              border-color 0.4s var(--easeOutQuart),
+              color 0.4s var(--easeOutQuart);
+}
+.card__play svg {
+  width: 1.8rem;
+  height: 1.8rem;
+  margin-left: 0.2rem; /* optical centring of the triangle */
+}
+
+.card__foot {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1.6rem;
+  padding-top: 1.2rem;
+  font-size: 1.2rem;
+  letter-spacing: 0.02em;
+}
+.card__name {
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+.card__cta {
+  color: var(--ink-disabled);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  transition: color 0.4s var(--easeOutQuart);
+}
+
+/* Hover / focus state for the whole tile */
+.card:hover .card__media,
+.card:focus-visible .card__media {
+  --lift: -0.6rem;
+  border-color: var(--hairline);
+}
+.card:hover .card__play,
+.card:focus-visible .card__play {
+  transform: translate(-50%, -50%) scale(1.12);
+  background-color: var(--cream);
+  border-color: var(--cream);
+  color: var(--navy);
+}
+.card:hover .card__img,
+.card:focus-visible .card__img { transform: scale(1.06); }
+.card:hover .card__scrim { opacity: 0.55; }
+.card:hover .card__index { color: rgba(255, 253, 226, 0.4); }
+.card:hover .card__cta { color: var(--ink); }
+
+/* Dim the siblings of the hovered tile, as the reference does with its lists */
+@media (hover: hover) and (min-width: 1024px) {
+  .work__track:hover .work__item:not(:hover) .card { opacity: 0.45; }
+}
+
+/* -----------------------------------------------------------------------------
+   11  REEL LIGHTBOX
+   Plays reels in-page. The <iframe> is created on open and destroyed on close,
+   so the page never carries more than one embed — and none at all on load.
+   -------------------------------------------------------------------------- */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-items: center;
+  padding: var(--padding-x);
+}
+.lightbox[hidden] { display: none; }
+
+.lightbox__scrim {
+  position: absolute;
+  inset: 0;
+  background: rgba(5, 18, 54, 0.72);
+  backdrop-filter: blur(0.8rem);
+  -webkit-backdrop-filter: blur(0.8rem);
+  animation: fade 0.4s var(--easeOutQuart);
+}
+
+.lightbox__panel {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  /* Capped in px, not rem: the fluid rem basis would shrink the panel at
+     narrower desktop widths. The second term keeps the 9:16 well in view. */
+  max-width: min(420px, calc((100svh - 16rem) * 0.5625));
+  display: grid;
+  gap: 1.2rem;
+  animation: rise 0.5s var(--easeOutQuart);
+}
+
+.lightbox__bar {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1.6rem;
+  color: var(--cream);
+  font-size: 1.2rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+.lightbox__close {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  color: var(--cream);
+  font-size: 1.2rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  transition: opacity 0.2s var(--easeOutQuart);
+}
+.lightbox__close:hover { opacity: 0.6; }
+.lightbox__close svg { width: 1.2rem; height: 1.2rem; }
+
+/* The embed sits in a 9:16 well matching the poster it grew out of */
+.lightbox__frame {
+  position: relative;
+  aspect-ratio: 9 / 16;
+  max-height: calc(100svh - 16rem);
+  border-radius: 0.4rem;
+  overflow: hidden;
+  background: var(--navy);
+}
+.lightbox__frame iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* Spinner shown until the embed's load event fires */
+.lightbox__spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 2.4rem;
+  height: 2.4rem;
+  margin: -1.2rem 0 0 -1.2rem;
+  border: 1px solid rgba(255, 253, 226, 0.25);
+  border-top-color: var(--cream);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+.lightbox.is-loaded .lightbox__spinner { display: none; }
+
+.lightbox__foot {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.6rem;
+  font-size: 1.2rem;
+  color: rgba(255, 253, 226, 0.7);
+}
+.lightbox__foot a { color: var(--cream); }
+
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes rise {
+  from { opacity: 0; transform: translate3d(0, 2rem, 0); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* -----------------------------------------------------------------------------
+   12  SERVICES
+   -------------------------------------------------------------------------- */
+.services__title { margin-bottom: 4.8rem; }
+
+.services__list { border-top: 1px solid var(--hairline); }
+
+.service {
+  display: grid;
+  gap: 1.2rem;
+  padding: 3.2rem 0;
+  border-bottom: 1px solid var(--hairline);
+  transition: color 0.4s var(--easeOutQuart);
+}
+@media (min-width: 1024px) {
+  .service {
+    grid-template-columns: 6rem minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--gap-x);
+    align-items: start;
+    padding: 4.8rem 0;
+  }
+}
+
+.service__num {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.4rem;
+  color: var(--ink-disabled);
+  transition: color 0.4s var(--easeOutQuart);
+}
+
+.service__name {
+  font-size: 2.4rem;
+  font-weight: 600;
+  line-height: 1em;
+  letter-spacing: -0.072rem;
+  text-transform: uppercase;
+}
+@media (min-width: 1200px) {
+  .service__name { font-size: 3.2rem; letter-spacing: -0.096rem; }
+}
+
+.service__desc {
+  font-size: 1.6rem;
+  line-height: 140%;
+  letter-spacing: -0.032rem;
+  color: var(--ink-secondary);
+  max-width: 46ch;
+}
+
+.service:hover .service__num { color: var(--ink); }
+
+/* -----------------------------------------------------------------------------
+   13  CONTACT
+   -------------------------------------------------------------------------- */
+.contact__grid {
+  display: grid;
+  gap: 4.8rem;
+}
+@media (min-width: 1024px) {
+  .contact__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--gap-x);
+    align-items: end;
+  }
+}
+
+.contact__intro { display: grid; gap: 2.4rem; }
+.contact__intro .lead { max-width: 38ch; }
+
+.contact__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.6rem;
+  align-content: end;
+}
+@media (min-width: 1024px) {
+  .contact__actions { justify-content: flex-end; }
+}
+
+/* Explicit contact details */
+.contact__details {
+  display: grid;
+  gap: 2.4rem;
+  margin-top: 8rem;
+  padding-top: 1.6rem;
+  border-top: 1px solid var(--hairline);
+}
+@media (min-width: 768px) {
+  .contact__details {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--gap-x);
+  }
+}
+.contact__details .label { margin-bottom: 1rem; }
+.contact__value {
+  font-size: 1.8rem;
+  letter-spacing: -0.036rem;
+}
+@media (min-width: 1200px) {
+  .contact__value { font-size: 2.4rem; letter-spacing: -0.048rem; }
+}
+
+/* -----------------------------------------------------------------------------
+   14  FOOTER
+   -------------------------------------------------------------------------- */
+.footer {
+  padding: 0 var(--padding-x) 1.6rem;
+  overflow: hidden;
+}
+@media (min-width: 768px) {
+  .footer { padding-bottom: 3.2rem; }
+}
+
+/* Oversized wordmark bleeding to the edges, drifting sideways on scroll */
+.footer__wordmark {
+  font-size: 12vw;
+  font-weight: 600;
+  line-height: 0.85em;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--ink);
+  opacity: 0.12;
+  margin-bottom: 3.2rem;
+  will-change: transform;
+}
+
+.footer__bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1.6rem;
+  padding-top: 1.6rem;
+  border-top: 1px solid var(--hairline-soft);
+  font-size: 1.2rem;
+  letter-spacing: 0.02em;
+  color: var(--ink-secondary);
+}
+
+/* -----------------------------------------------------------------------------
+   15  REVEAL, PARALLAX & REDUCED MOTION
+
+   Parallax is driven by a single --py (and --px) custom property written by
+   script.js, so it composes with the reveal offset and hover lifts instead of
+   fighting them over the `transform` property.
+   -------------------------------------------------------------------------- */
+.js [data-reveal] {
+  opacity: 0;
+  transform: translate3d(0, calc(2rem + var(--py, 0px)), 0);
+  transition: opacity 0.9s var(--easeOutQuart), transform 0.9s var(--easeOutQuart);
+  transition-delay: calc(var(--i, 0) * 0.08s);
+}
+.js [data-reveal].is-inview {
+  opacity: 1;
+  transform: translate3d(var(--px, 0px), var(--py, 0px), 0);
+}
+
+/* Once revealed, parallax updates must not be eased or they lag the scroll */
+.js [data-reveal].is-inview.has-parallax { transition: opacity 0.9s var(--easeOutQuart); }
+
+[data-parallax]:not([data-reveal]),
+[data-parallax-x]:not([data-reveal]) {
+  transform: translate3d(var(--px, 0px), var(--py, 0px), 0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+
+  .js [data-reveal] { opacity: 1; transform: none; }
+  .marquee__track { animation: none; }
+}
